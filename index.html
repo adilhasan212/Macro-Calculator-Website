@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <title>Macro Calculator</title>
+    <link rel="stylesheet" href="styles.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="wrapper">
+        <div class="container">
+            <div class="title__container">
+                <h1>Macro Calculator</h1>
+            </div>
+
+            <form id="macroForm">
+                <label for="units">Select Units</label>
+                <select name="units" id="units">
+                    <option value="A">Imperial</option>
+                    <option value="B">SI</option>
+                </select>
+
+                <label for="gender">Select Gender</label>
+                <select name="gender" id="gender">
+                    <option value="A">Male</option>
+                    <option value="B">Female</option>
+                </select>
+
+                <label for="age">Enter Age</label>
+                <input type="number" id="age" name="age" required min="0" max="150">
+
+                <label for="goal">Select Goal</label>
+                <select name="goal" id="goal">
+                    <option value="A">Cut</option>
+                    <option value="B">Bulk</option>
+                    <option value="C">Maintain</option>
+                </select>
+
+                <label for="activityLevel">Select Activity Level</label>
+                <select name="activityLevel" id="activityLevel">
+                    <option value="A">Not Active</option>
+                    <option value="B">Lightly Active</option>
+                    <option value="C">Moderately Active</option>
+                    <option value="D">Active</option>
+                    <option value="E">Very Active</option>
+                </select>
+
+                <div id="imperialInputs">
+                    <label for="heightFeet">Enter Height (feet)</label>
+                    <input type="number" id="heightFeet" name="heightFeet" min="0" max="11">
+                    <label for="heightInches">Enter Height (inches)</label>
+                    <input type="number" id="heightInches" name="heightInches" min="0" max="12">
+                    <label for="weightImperial">Enter Weight (lbs)</label>
+                    <input type="number" id="weightImperial" name="weightImperial" min="0" max="1500">
+                </div>
+
+                <div id="metricInputs" style="display: none;">
+                    <label for="heightMetric">Enter Height (cm)</label>
+                    <input type="number" id="heightMetric" name="heightMetric" min="0" max="300">
+                    <label for="weightMetric">Enter Weight (kgs)</label>
+                    <input type="number" id="weightMetric" name="weightMetric" min="0" max="680">
+                </div>
+                
+                <button type="submit">Calculate</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footerContainer">
+            <div class="socialIcons">
+                <a href="https://adilhasan.me" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-a"></i></a>
+                <a href="https://www.linkedin.com/in/adil-hasan-033304280/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="https://github.com/adilhasan212" target="_blank"><i class="fa-brands fa-github"></i></a>
+                <a href="https://www.instagram.com/adilh212/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+            <div class="footerNav"></div>
+        </div>
+        <div class="footerBottom">
+            <p>Copyright &copy;2024; Designed by <span class="designer">Adil Hasan</span></p>
+        </div>
+    </footer>
+
+    <script>
+        const apiUrl = 'http://127.0.0.1:3000/calculate';
+        
+        const unitsSelect = document.getElementById('units');
+        const imperialInputs = document.getElementById('imperialInputs');
+        const metricInputs = document.getElementById('metricInputs');
+        const weightImperial = document.getElementById('weightImperial');
+        const weightMetric = document.getElementById('weightMetric');
+
+        unitsSelect.addEventListener('change', function() {
+            if (this.value === 'A') {
+                imperialInputs.style.display = 'block';
+                metricInputs.style.display = 'none';
+                weightImperial.required = true;
+                weightMetric.required = false;
+            } else {
+                imperialInputs.style.display = 'none';
+                metricInputs.style.display = 'block';
+                weightImperial.required = false;
+                weightMetric.required = true;
+            }
+        });
+
+        document.getElementById('macroForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            // Validation checks
+            const age = parseInt(data.age);
+            const weight = unitsSelect.value === 'A' ? parseFloat(data.weightImperial) : parseFloat(data.weightMetric);
+            const heightFeet = parseFloat(data.heightFeet) || 0;
+            const heightInches = parseFloat(data.heightInches) || 0;
+            const heightMetric = parseFloat(data.heightMetric) || 0;
+
+            if (age < 0 || age > 150) {
+                alert("Please enter a valid age between 0 and 150.");
+                return;
+            }
+            
+            if (unitsSelect.value === 'A') {
+                if (weight < 0 || weight > 1500) {
+                    alert("Please enter a valid weight in pounds between 0 and 1500.");
+                    return;
+                }
+
+                if (heightFeet < 0 || heightFeet > 11 || heightInches < 0 || heightInches > 12) {
+                    alert("Please enter a valid height in feet (0-11) and inches (0-12).");
+                    return;
+                }
+            } else if (unitsSelect.value === 'B') {
+                if (weight < 0 || weight > 680) {
+                    alert("Please enter a valid weight in kilograms between 0 and 680.");
+                    return;
+                }
+
+                if (heightMetric < 0 || heightMetric > 300) {
+                    alert("Please enter a valid height in centimeters between 0 and 300.");
+                    return;
+                }
+            }
+
+            console.log('Form data:', data);
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                console.log('Server response:', result);
+
+                const queryString = new URLSearchParams(result).toString();
+                window.location.href = 'results.html?' + queryString;
+            } catch (error) {
+                console.error('Error during form submission:', error);
+            }
+        });
+    </script>
+</body>
+</html>

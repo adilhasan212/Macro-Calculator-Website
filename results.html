@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <title>Results</title>
+    <link rel="stylesheet" href="styles.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="wrapper">
+        <div class="container">
+            <h1>Your Results</h1>
+            <br>
+            <div class="results__container">
+                <div class="recommended__container">
+                    <p>Recommended Daily Intake</p>
+                </div>
+                <div id="results"></div>
+            </div>
+            <br>
+            <button id="goBackButton">Go Back</button>
+        </div>
+    </div>
+    <footer>
+        <div class="footerContainer">
+            <div class="socialIcons">
+                <a href="https://adilhasan.me" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-a"></i></a>
+                <a href="https://www.linkedin.com/in/adil-hasan-033304280/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="https://github.com/adilhasan212" target="_blank"><i class="fa-brands fa-github"></i></a>
+                <a href="https://www.instagram.com/adilh212/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+            <div class="footerNav"></div>
+        </div>
+        <div class="footerBottom">
+            <p>&copy; 2024 Designed by <span class="designer">Adil Hasan</span></p>
+        </div>
+    </footer>
+    
+    <script>
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            let result = {};
+            for (const [key, value] of params.entries()) {
+                result[key] = value;
+            }
+            return result;
+        }
+
+        function displayResults() {
+            const resultsDiv = document.getElementById('results');
+            const params = getQueryParams();
+
+            const calories = params.calories;
+            const proteinMin = params.protein_min;
+            const proteinMax = params.protein_max;
+
+            if (calories && proteinMin && proteinMax) {
+                const pCalories = document.createElement('div');
+                pCalories.classList.add('result-item');
+                pCalories.innerHTML = `<span>Calories:</span> ${calories}`;
+                resultsDiv.appendChild(pCalories);
+
+                const pProtein = document.createElement('div');
+                pProtein.classList.add('result-item');
+                pProtein.innerHTML = `<span>Protein:</span> ${proteinMin}-${proteinMax}`;
+                resultsDiv.appendChild(pProtein);
+            } else {
+                resultsDiv.textContent = 'No valid results received.';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', displayResults);
+
+        document.getElementById('goBackButton').addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

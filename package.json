@@ -1,0 +1,17 @@
+{
+  "name": "macro-calculator-website",
+  "version": "1.0.0",
+  "description": "A website to calculate daily calorie and protein intake.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "Adil Hasan",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}
