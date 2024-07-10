@@ -8,6 +8,8 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+console.log('Environment Variables:', process.env); // Debugging line
+
 app.post('/calculate', (req, res) => {
     console.log('Request body:', req.body);
 
@@ -35,6 +37,8 @@ app.post('/calculate', (req, res) => {
     });
 });
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+const PORT = process.env.PORT || 3000;
+console.log(`Attempting to listen on port ${PORT}`); // Debugging line
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
